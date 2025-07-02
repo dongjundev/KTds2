@@ -1,6 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
+from PIL import Image, ImageDraw, ImageFont
 
 load_dotenv()
 
@@ -54,7 +55,37 @@ def object_detect(image_path):
     else:
         print(f"Error: {response.status_code} - {response.text}")
         return None
+    
+# create bounding box function
+def create_bounding_box(image_path, detection_data):
+    try:
+        image = Image.open(image_path)
+    except Exception as e:
+        print(f"Error opening image file: {e}")
+        return None
 
+    draw = ImageDraw.Draw(image)
+
+    for obj in detection_data.get("objects", []):
+        rect = obj["rectangle"]
+        x, y, w, h = rect["x"], rect["y"], rect["w"], rect["h"]
+
+        draw.rectangle((x, y, x+w, y+h), outline="red", width=2)
+
+        label = obj["object"]
+        draw.text((x, y), label, fill="red")
+    
+    # Save the modified image
+    parts = image_path.rsplit('.', 1)
+
+    if len(parts) == 2:
+        output_path = f"{parts[0]}_annotated.{parts[1]}"
+    else:
+        output_path = f"{image_path}_annotated"
+    
+    image.save(output_path)
+    print(f"Annotated image saved as {output_path}")
+    image.show()
 def main():
     image_path = input("Enter the path to the image file: ")
 
@@ -66,6 +97,10 @@ def main():
         result = analyze_image(image_path)
     elif choice == '2':
         result = object_detect(image_path)
+        if result:
+            create_bounding_box(image_path, result)
+        else:
+            print("No objects detected or an error occurred.")  
     else:
         print("Invalid choice. Please select 1 or 2.")
         return
