@@ -72,8 +72,14 @@ def create_bounding_box(image_path, detection_data):
 
         draw.rectangle((x, y, x+w, y+h), outline="red", width=2)
 
+        # 폰트 설정 (arial.ttf가 없으면 기본 폰트 사용)
+        try:
+            font = ImageFont.truetype("arial.ttf", 60)
+        except:
+            font = ImageFont.load_default()
+
         label = obj["object"]
-        draw.text((x, y), label, fill="red")
+        draw.text((x, y), label, fill="red", font=font)
     
     # Save the modified image
     parts = image_path.rsplit('.', 1)
@@ -86,12 +92,38 @@ def create_bounding_box(image_path, detection_data):
     image.save(output_path)
     print(f"Annotated image saved as {output_path}")
     image.show()
+
+# OCR function
+def ocr_image(image_path):
+    ENDPOINT_URL = ENDPOINT + "vision/v3.2/ocr"
+
+    headers = {
+        "Ocp-Apim-Subscription-Key": SUBSCRPTION_KEY,
+        "Content-Type": "application/octet-stream"
+    }
+
+    try:
+        with open(image_path, "rb") as image_file:
+            image_data = image_file.read()
+    except Exception as e:
+        print(f"Error reading image file: {e}")
+        return None
+    
+    response = requests.post(ENDPOINT_URL, headers=headers, data=image_data)
+    if response.status_code == 200:
+        detection = response.json()
+        return detection
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+        return None 
+
 def main():
     image_path = input("Enter the path to the image file: ")
 
     print("1. Analyze Image")
     print("2. Object Detect")
-    choice = input("Choose an option (1 or 2): ")
+    print("3. OCR Image")
+    choice = input("Select an option (1, 2, or 3): ")
 
     if choice == '1':
         result = analyze_image(image_path)
@@ -100,7 +132,14 @@ def main():
         if result:
             create_bounding_box(image_path, result)
         else:
-            print("No objects detected or an error occurred.")  
+            print("No objects detected or an error occurred.") 
+    elif choice == '3':
+        result = ocr_image(image_path)
+        if result:
+            print("OCR Result:")
+            print(result)
+        else:
+            print("No text detected or an error occurred.")
     else:
         print("Invalid choice. Please select 1 or 2.")
         return
