@@ -12,6 +12,8 @@
 
 [<Day 8> LLM Fine tuning, Azure AI Agent](./Day%208/)
 
+[<MVP> MVP Project](./MVP/)
+
 ## 참고 자료 
 [Git 강좌](https://www.youtube.com/watch?v=JZJQ4_8XoPM&list=PLHF1wYTaCuixewA1hAn8u6hzx5mNenAGM)
 
