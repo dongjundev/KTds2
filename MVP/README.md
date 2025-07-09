@@ -1,10 +1,7 @@
-# 최종 결과물 등록 품
+# 2기 최종 결과물 등록 품
 
 작업이 끝나신 분들은 이 링크의 폼을 작성해 주세요 
 [http://forms.office.com/r/kpkXWxYMmS](http://forms.office.com/r/kpkXWxYMmS)
-
-# 6월 20일 발표 순서(랜덤)
-[https://adorable-hail-415.notion.site/11-MVP-217137efedf680e18bbcdc8d2ab3026c](https://adorable-hail-415.notion.site/11-MVP-217137efedf680e18bbcdc8d2ab3026c)
 
 # 평가 기준
 | 평가 항목           | 설명                                                                                                                                                             | 배점 |
